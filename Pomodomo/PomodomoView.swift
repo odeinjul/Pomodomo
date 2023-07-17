@@ -7,59 +7,33 @@
 
 import SwiftUI
 
-struct CircularProgressView: View {
-    let progress: Double
-    var body: some View {
-        ZStack {
-            Circle()
-                .trim(from: 0, to: 0.5)
-                .stroke(
-                    Color("Gray"),
-                    style: StrokeStyle(lineWidth: 8, lineCap: .round)
-                )
-            Circle()
-                .trim(from: 0, to: progress / 2)
-                .stroke(
-                    Color.accentColor,
-                    style: StrokeStyle(lineWidth: 8, lineCap: .round)
-            )
-        }
-        .rotationEffect(.degrees(180))
-        .animation(.easeInOut, value: progress)
-    }
-}
-
-func secondsToHoursMinutesSeconds(_ seconds: Int) -> (String) {
-    let m = seconds / 60, s = (seconds % 3600) % 60
-    return (m < 10 ? "0" : "") + "\(m)" + (s < 10 ? ":0" : ":") + "\(s)"
-}
-
-struct BlackButton: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding(.vertical, 10)
-            .padding(.horizontal, 10)
-            .background(Color(red: 0, green: 0, blue: 0))
-            .foregroundStyle(.white)
-            .clipShape(Capsule())
-    }
-}
-
-
 struct TimerView: View {
-    @State var timePassed = 0.0
-    @State var timeTotal = 25 * 60.0
+    @State var pomodomoCount = 0
+    @StateObject var pomodomoCurrent = Pomodomo(type: .Pomo)
+    @State var stop = true
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
     var body: some View {
         ZStack {
             VStack (spacing: 25) {
                 VStack (spacing: 0) {
-                    Text("剩余时间")
-                        .font(.system(size: 15, weight: .semibold))
-                    Text("\(secondsToHoursMinutesSeconds(Int(timeTotal - timePassed)))")
+                    HStack {
+                        Text(pomodomoCurrent.type.simpleDescription())
+                            .padding(.vertical, 2)
+                            .padding(.horizontal, 6)
+                            .foregroundColor(.white)
+                            .font(.system(size: 15, weight: .medium))
+                            .background(RoundedRectangle(cornerRadius: 5)
+                                .fill(.black))
+                        Text("剩余时间")
+                            .font(.system(size: 15, weight: .semibold))
+                    }
+                    Text("\(secondsToHoursMinutesSeconds(Int(pomodomoCurrent.timeTotal - pomodomoCurrent.timePassed)))")
                         .onReceive(timer) { _ in
-                            if timePassed < timeTotal {
-                                timePassed += 1.0
+                            if (pomodomoCurrent.timePassed <= pomodomoCurrent.timeTotal && !stop)  {
+                                pomodomoCurrent.timePassed += 1.0
+                                print((secondsToHoursMinutesSeconds(Int(pomodomoCurrent.timeTotal - pomodomoCurrent.timePassed))))
+                                
                             }
                         }
                         .font(.system(size: 55))
@@ -69,16 +43,17 @@ struct TimerView: View {
                 
                 HStack {
                     Button(action: {
-                        
+                        pomodomoCurrent.timePassed = 0.0
+                        stop = true
                     }) {
                         Image(systemName:"backward.end.circle")
                     }
                     .buttonStyle(BlackButton())
                     
                     Button(action: {
-                        
+                        stop = !stop
                     }) {
-                        Text("暂停")
+                        Text(stop ? "继续" : "暂停")
                             .padding(.vertical, 3)
                             .padding(.horizontal, 20)
                             .font(.system(size: 14, weight: .medium))
@@ -86,7 +61,16 @@ struct TimerView: View {
                     .buttonStyle(BlackButton())
                     
                     Button(action: {
-                        
+                        pomodomoCount += 1
+                        pomodomoCount %= 8
+                        if (pomodomoCount == 7) {
+                            pomodomoCurrent.setType(.LongRelax)
+                        } else if (pomodomoCount % 2 == 0) {
+                            pomodomoCurrent.setType(.Pomo)
+                        } else {
+                            pomodomoCurrent.setType(.SmallRelax)
+                        }
+                        stop = true
                     }) {
                         Image(systemName:"arrow.forward.circle")
                     }
@@ -94,10 +78,11 @@ struct TimerView: View {
                 }
                 .font(.system(size: 20, weight: .medium))
             }
-            .offset(y: -80)
+            .offset(y: 0)
             
-            CircularProgressView(progress: timePassed/timeTotal)
+            CircularProgressView(progress: pomodomoCurrent.timePassed/pomodomoCurrent.timeTotal)
         }
+        .frame(minWidth: 650, maxWidth: .infinity, minHeight: 400, maxHeight: 400)
     }
 }
 
@@ -111,7 +96,7 @@ struct PomodomoView: View {
             .clipped()
             .shadow(color: .gray.opacity(0.3), radius: 20)
         }
-        .padding(20)
+        .padding(40)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.white)
     }
@@ -119,6 +104,7 @@ struct PomodomoView: View {
 
 struct PomodomoView_Previews: PreviewProvider {
     static var previews: some View {
+        CircularProgressView(progress: 0.5)
         PomodomoView()
     }
 }
