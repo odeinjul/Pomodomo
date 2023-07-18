@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 
 enum PomodomoType: String {
@@ -26,6 +27,7 @@ class Pomodomo: ObservableObject{
     @Published var type: PomodomoType
     @Published var timeTotal: Double
     @Published var timePassed: Double
+    @Published var color: Color
     
     init(type: PomodomoType) {
         self.type = type
@@ -33,10 +35,13 @@ class Pomodomo: ObservableObject{
         switch type {
         case .Pomo:
             self.timeTotal = 25 * 60.0
+            self.color = Color("PomoRed")
         case .SmallRelax:
             self.timeTotal = 5 * 60.0
+            self.color = Color("PomoGreen")
         case .LongRelax:
             self.timeTotal = 15 * 60.0
+            self.color = Color("PomoBlue")
         }
         
         self.timePassed = 0.0
@@ -47,11 +52,14 @@ class Pomodomo: ObservableObject{
         
         switch newType {
         case .Pomo:
-            timeTotal = 25 * 60.0
+            self.timeTotal = 25 * 60.0
+            self.color = Color("PomoRed")
         case .SmallRelax:
-            timeTotal = 5 * 60.0
+            self.timeTotal = 5 * 60.0
+            self.color = Color("PomoGreen")
         case .LongRelax:
-            timeTotal = 15 * 60.0
+            self.timeTotal = 15 * 60.0
+            self.color = Color("PomoBlue")
         }
         
         timePassed = 0.0

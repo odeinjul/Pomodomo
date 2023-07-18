@@ -7,11 +7,39 @@
 
 import SwiftUI
 
+var pomodomoCount = 0
+var stop = true
+var timerColor = Color("PomoRed")
+
 struct TimerView: View {
-    @State var pomodomoCount = 0
-    @StateObject var pomodomoCurrent = Pomodomo(type: .Pomo)
-    @State var stop = true
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @StateObject var pomodomoCurrent = Pomodomo(type: .Pomo)
+    @State var backgroundColor = Color.black
+    var colorChangeAction: (Color) -> Void
+        
+    
+    func NextPomo (pomodomoCurrent: Pomodomo)-> Void {
+        pomodomoCount += 1
+        pomodomoCount %= 8
+        if (pomodomoCount == 7) {
+            pomodomoCurrent.setType(.LongRelax)
+        } else if (pomodomoCount % 2 == 0) {
+            pomodomoCurrent.setType(.Pomo)
+        } else {
+            pomodomoCurrent.setType(.SmallRelax)
+        }
+        timerColor = pomodomoCurrent.color
+        withAnimation {
+            colorChangeAction(timerColor)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            withAnimation {
+                colorChangeAction(Color("BackgroundWhite"))
+            }
+        }
+
+        stop = true
+    }
     
     var body: some View {
         ZStack {
@@ -24,7 +52,7 @@ struct TimerView: View {
                             .foregroundColor(.white)
                             .font(.system(size: 15, weight: .medium))
                             .background(RoundedRectangle(cornerRadius: 5)
-                                .fill(.black))
+                                .fill(timerColor))
                         Text("剩余时间")
                             .font(.system(size: 15, weight: .semibold))
                     }
@@ -34,6 +62,9 @@ struct TimerView: View {
                                 pomodomoCurrent.timePassed += 1.0
                                 print((secondsToHoursMinutesSeconds(Int(pomodomoCurrent.timeTotal - pomodomoCurrent.timePassed))))
                                 
+                            }
+                            else if(pomodomoCurrent.timePassed == pomodomoCurrent.timeTotal) {
+                                NextPomo(pomodomoCurrent: pomodomoCurrent)
                             }
                         }
                         .font(.system(size: 55))
@@ -61,16 +92,7 @@ struct TimerView: View {
                     .buttonStyle(BlackButton())
                     
                     Button(action: {
-                        pomodomoCount += 1
-                        pomodomoCount %= 8
-                        if (pomodomoCount == 7) {
-                            pomodomoCurrent.setType(.LongRelax)
-                        } else if (pomodomoCount % 2 == 0) {
-                            pomodomoCurrent.setType(.Pomo)
-                        } else {
-                            pomodomoCurrent.setType(.SmallRelax)
-                        }
-                        stop = true
+                        NextPomo(pomodomoCurrent: pomodomoCurrent)
                     }) {
                         Image(systemName:"arrow.forward.circle")
                     }
@@ -87,11 +109,20 @@ struct TimerView: View {
 }
 
 struct PomodomoView: View {
+    @State private var backgroundColor = Color("BackgroundWhite")
+    
+    func ChangeColor(color: Color) -> Void {
+        backgroundColor = color
+    }
+    
     var body: some View {
         ZStack{
-            TimerView()
+            TimerView(colorChangeAction: { newColor in
+                self.changeBackgroundColor(newColor)
+            })
             .padding(30)
-            .background(.white)
+            .background(backgroundColor)
+            //.animation(.easeInOut, value: backgroundColor)
             .cornerRadius(8)
             .clipped()
             .shadow(color: .gray.opacity(0.3), radius: 20)
@@ -99,6 +130,10 @@ struct PomodomoView: View {
         .padding(40)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.white)
+    }
+    
+    func changeBackgroundColor(_ newColor: Color) {
+            backgroundColor = newColor
     }
 }
 
