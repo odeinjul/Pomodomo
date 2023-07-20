@@ -6,18 +6,21 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 var pomodomoCount = 0
-var stop = true
 var timerColor = Color("PomoRed")
+
+let musicData = NSDataAsset(name: "Ring")!.data
+var audioPlayer: AVAudioPlayer?
 
 struct TimerView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @StateObject var pomodomoCurrent = Pomodomo(type: .Pomo)
     @State var backgroundColor = Color.black
+    @State var stop = false
     var colorChangeAction: (Color) -> Void
         
-    
     func NextPomo (pomodomoCurrent: Pomodomo)-> Void {
         pomodomoCount += 1
         pomodomoCount %= 8
@@ -60,10 +63,16 @@ struct TimerView: View {
                         .onReceive(timer) { _ in
                             if (pomodomoCurrent.timePassed <= pomodomoCurrent.timeTotal && !stop)  {
                                 pomodomoCurrent.timePassed += 1.0
-                                print((secondsToHoursMinutesSeconds(Int(pomodomoCurrent.timeTotal - pomodomoCurrent.timePassed))))
+                                // print((secondsToHoursMinutesSeconds(Int(pomodomoCurrent.timeTotal - pomodomoCurrent.timePassed))))
                                 
                             }
                             else if(pomodomoCurrent.timePassed == pomodomoCurrent.timeTotal) {
+                                do{
+                                    audioPlayer = try AVAudioPlayer(data: musicData)
+                                    audioPlayer?.play()
+                                }catch{
+                                    print("Failed to play sound")
+                                }
                                 NextPomo(pomodomoCurrent: pomodomoCurrent)
                             }
                         }
@@ -102,7 +111,7 @@ struct TimerView: View {
             }
             .offset(y: 0)
             
-            CircularProgressView(progress: pomodomoCurrent.timePassed/pomodomoCurrent.timeTotal)
+            CircularProgressView(progress: pomodomoCurrent.timePassed / pomodomoCurrent.timeTotal)
         }
         .frame(minWidth: 650, maxWidth: .infinity, minHeight: 400, maxHeight: 400)
     }
