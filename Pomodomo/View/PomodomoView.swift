@@ -17,6 +17,7 @@ var audioPlayer: AVAudioPlayer?
 struct TimerView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @StateObject var pomodomoCurrent = Pomodomo(type: .Pomo)
+    @Environment(\.managedObjectContext) var context
     @State var backgroundColor = Color.black
     @State var stop = false
     var colorChangeAction: (Color) -> Void

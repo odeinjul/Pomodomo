@@ -18,6 +18,11 @@
 		E5A189AA2A62C88300E1AB4E /* PomodomoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A189A92A62C88300E1AB4E /* PomodomoUITests.swift */; };
 		E5A189AC2A62C88300E1AB4E /* PomodomoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A189AB2A62C88300E1AB4E /* PomodomoUITestsLaunchTests.swift */; };
 		E5A189B92A62DFD600E1AB4E /* PomodomoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A189B82A62DFD600E1AB4E /* PomodomoView.swift */; };
+		E5B522A42A698664008C71DF /* PomodataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E5B522A22A698664008C71DF /* PomodataModel.xcdatamodeld */; };
+		E5B522A72A698724008C71DF /* PomoCount+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B522A52A698724008C71DF /* PomoCount+CoreDataClass.swift */; };
+		E5B522A82A698724008C71DF /* PomoCount+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B522A62A698724008C71DF /* PomoCount+CoreDataProperties.swift */; };
+		E5B522AB2A698916008C71DF /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B522AA2A698916008C71DF /* Persistence.swift */; };
+		E5B522AE2A6A34B1008C71DF /* StaticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B522AD2A6A34B1008C71DF /* StaticsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +58,11 @@
 		E5A189A92A62C88300E1AB4E /* PomodomoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodomoUITests.swift; sourceTree = "<group>"; };
 		E5A189AB2A62C88300E1AB4E /* PomodomoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodomoUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E5A189B82A62DFD600E1AB4E /* PomodomoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodomoView.swift; sourceTree = "<group>"; };
+		E5B522A32A698664008C71DF /* PomodataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PomodataModel.xcdatamodel; sourceTree = "<group>"; };
+		E5B522A52A698724008C71DF /* PomoCount+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PomoCount+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E5B522A62A698724008C71DF /* PomoCount+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PomoCount+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E5B522AA2A698916008C71DF /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		E5B522AD2A6A34B1008C71DF /* StaticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,15 +113,14 @@
 		E5A1898C2A62C88200E1AB4E /* Pomodomo */ = {
 			isa = PBXGroup;
 			children = (
+				E5B522AC2A6A3499008C71DF /* View */,
+				E5B522A92A698738008C71DF /* Model */,
 				E5A1898D2A62C88200E1AB4E /* PomodomoApp.swift */,
-				E5A1898F2A62C88200E1AB4E /* ContentView.swift */,
 				E5A189912A62C88300E1AB4E /* Assets.xcassets */,
 				E5A189962A62C88300E1AB4E /* Pomodomo.entitlements */,
 				E5A189932A62C88300E1AB4E /* Preview Content */,
-				E5A189B82A62DFD600E1AB4E /* PomodomoView.swift */,
 				E50EBB0A2A64E84C00CC0E9D /* PomodomoUtil.swift */,
 				E50EBB082A64E81700CC0E9D /* PomodomoStyle.swift */,
-				E50EBB062A64E7DD00CC0E9D /* PomodomoModel.swift */,
 			);
 			path = Pomodomo;
 			sourceTree = "<group>";
@@ -139,6 +148,28 @@
 				E5A189AB2A62C88300E1AB4E /* PomodomoUITestsLaunchTests.swift */,
 			);
 			path = PomodomoUITests;
+			sourceTree = "<group>";
+		};
+		E5B522A92A698738008C71DF /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E5B522A22A698664008C71DF /* PomodataModel.xcdatamodeld */,
+				E50EBB062A64E7DD00CC0E9D /* PomodomoModel.swift */,
+				E5B522A52A698724008C71DF /* PomoCount+CoreDataClass.swift */,
+				E5B522A62A698724008C71DF /* PomoCount+CoreDataProperties.swift */,
+				E5B522AA2A698916008C71DF /* Persistence.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		E5B522AC2A6A3499008C71DF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E5A1898F2A62C88200E1AB4E /* ContentView.swift */,
+				E5A189B82A62DFD600E1AB4E /* PomodomoView.swift */,
+				E5B522AD2A6A34B1008C71DF /* StaticsView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,12 +302,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5B522A72A698724008C71DF /* PomoCount+CoreDataClass.swift in Sources */,
 				E5A189B92A62DFD600E1AB4E /* PomodomoView.swift in Sources */,
 				E50EBB072A64E7DD00CC0E9D /* PomodomoModel.swift in Sources */,
+				E5B522A42A698664008C71DF /* PomodataModel.xcdatamodeld in Sources */,
 				E50EBB092A64E81700CC0E9D /* PomodomoStyle.swift in Sources */,
+				E5B522AB2A698916008C71DF /* Persistence.swift in Sources */,
+				E5B522AE2A6A34B1008C71DF /* StaticsView.swift in Sources */,
 				E5A189902A62C88200E1AB4E /* ContentView.swift in Sources */,
 				E5A1898E2A62C88200E1AB4E /* PomodomoApp.swift in Sources */,
 				E50EBB0B2A64E84C00CC0E9D /* PomodomoUtil.swift in Sources */,
+				E5B522A82A698724008C71DF /* PomoCount+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,6 +630,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		E5B522A22A698664008C71DF /* PomodataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E5B522A32A698664008C71DF /* PomodataModel.xcdatamodel */,
+			);
+			currentVersion = E5B522A32A698664008C71DF /* PomodataModel.xcdatamodel */;
+			path = PomodataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = E5A189822A62C88200E1AB4E /* Project object */;
 }
