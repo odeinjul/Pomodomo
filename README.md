@@ -1,5 +1,5 @@
 # Pomodomo
-A *pomodomo* app made by Swift.
+A *pomodoro* app made by Swift.
 
 <img src="Pomodomo/Assets.xcassets/AppIcon.appiconset/Icon.png" style="width: 15%;">
 
