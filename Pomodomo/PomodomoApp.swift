@@ -22,15 +22,21 @@ struct PomodomoApp: App {
         })
     }
     
+    
     let tabs: [String] = ["Pomodoro", "Statics"]
     @State private var selection: String = "Pomodoro"   
     var body: some Scene {
         WindowGroup {
             NavigationSplitView {
+                VStack (alignment: .leading){
+                    Text("Pomodomo")
+                        .fontWeight(.medium)
                     List(tabs, id: \.self, selection: $selection) { tab in
                         NavigationLink(tab.description, value: tab)
                     }
+                    .toolbar(.hidden)
                     .listStyle(.sidebar)
+                }
             } detail: {
                 switch selection {
                 case "Pomodomo":
@@ -46,6 +52,7 @@ struct PomodomoApp: App {
             }
             .navigationTitle(selection)
         }
+        .windowStyle(HiddenTitleBarWindowStyle())
     }
 }
 

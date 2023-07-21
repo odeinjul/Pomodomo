@@ -15,22 +15,10 @@ struct StaticsView: View {
         VStack {
             // Test part
             Button("Add") {
-                let count = 3
-                let time = 45
-                let date = createDateOnly(year: 2023, month: 7, day: 20)
-                if let existingRecord = fetchRecord(for: date) {
-                    existingRecord.count += Int16(count)
-                    existingRecord.time += Int16(time)
-                } else {
-                    let day = PomoCount(context: context)
-                    day.date = date
-                    day.count = Int16(count)
-                    day.time = Int16(time)
-                }
-                try! context.save()
+                addRecord(context: context, date: Date.now, count: 1, time: 25)
             }
             Button("Clear Data") {
-                clearCoreData()
+                clearCoreData(context: context)
             }
             ForEach(history, id: \.self) { day in
                 HStack {
@@ -39,46 +27,6 @@ struct StaticsView: View {
                 }
             }
         }
-    }
-    
-    private func clearCoreData() {
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = PomoCount.fetchRequest()
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        do {
-            try context.execute(batchDeleteRequest)
-            try context.save()
-        } catch {
-            // Handle the error
-            print("Error clearing Core Data: \(error)")
-        }
-    }
-    
-    private func fetchRecord(for date: Date) -> PomoCount? {
-        let fetchRequest: NSFetchRequest<PomoCount> = PomoCount.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "date == %@", date as NSDate)
-        do {
-            let results = try context.fetch(fetchRequest)
-            return results.first
-        } catch {
-            print("Error fetching records: \(error)")
-            return nil
-        }
-    }
-    
-    private func formatDate(date: Date) -> String {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .short
-            formatter.timeStyle = .short
-            return formatter.string(from: date)
-    }
-    
-    private func createDateOnly(year: Int, month: Int, day: Int) -> Date {
-        var components = DateComponents()
-        components.year = year
-        components.month = month
-        components.day = day
-        let calendar = Calendar.current
-        return calendar.date(from: components) ?? Date()
     }
 }
 

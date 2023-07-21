@@ -23,6 +23,7 @@
 		E5B522A82A698724008C71DF /* PomoCount+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B522A62A698724008C71DF /* PomoCount+CoreDataProperties.swift */; };
 		E5B522AB2A698916008C71DF /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B522AA2A698916008C71DF /* Persistence.swift */; };
 		E5B522AE2A6A34B1008C71DF /* StaticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B522AD2A6A34B1008C71DF /* StaticsView.swift */; };
+		E5B522B02A6A6581008C71DF /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B522AF2A6A6581008C71DF /* NavigationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		E5B522A62A698724008C71DF /* PomoCount+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PomoCount+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E5B522AA2A698916008C71DF /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		E5B522AD2A6A34B1008C71DF /* StaticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticsView.swift; sourceTree = "<group>"; };
+		E5B522AF2A6A6581008C71DF /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +170,7 @@
 				E5A1898F2A62C88200E1AB4E /* ContentView.swift */,
 				E5A189B82A62DFD600E1AB4E /* PomodomoView.swift */,
 				E5B522AD2A6A34B1008C71DF /* StaticsView.swift */,
+				E5B522AF2A6A6581008C71DF /* NavigationView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				E5A189902A62C88200E1AB4E /* ContentView.swift in Sources */,
 				E5A1898E2A62C88200E1AB4E /* PomodomoApp.swift in Sources */,
 				E50EBB0B2A64E84C00CC0E9D /* PomodomoUtil.swift in Sources */,
+				E5B522B02A6A6581008C71DF /* NavigationView.swift in Sources */,
 				E5B522A82A698724008C71DF /* PomoCount+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
