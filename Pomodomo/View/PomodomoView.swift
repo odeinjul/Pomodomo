@@ -18,16 +18,25 @@ struct PomodomoView: View {
     @State private var backgroundColor = Color("BackgroundWhite")
     
     var body: some View {
-        ZStack{
-            TimerView(colorChangeAction: { newColor in
-                self.changeBackgroundColor(newColor)
-            })
-            .padding(30)
-            .background(backgroundColor)
-            //.animation(.easeInOut, value: backgroundColor)
-            .cornerRadius(8)
-            .clipped()
-            .shadow(color: .gray.opacity(0.3), radius: 20)
+        ZStack {
+            VStack {
+                TimerView(colorChangeAction: { newColor in
+                    self.changeBackgroundColor(newColor)
+                })
+                .padding(30)
+                .background(backgroundColor)
+                //.animation(.easeInOut, value: backgroundColor)
+                .cornerRadius(8)
+                .clipped()
+                .shadow(color: .gray.opacity(0.3), radius: 20)
+                StaticsView()
+                    .padding(30)
+                    .background(backgroundColor)
+                    //.animation(.easeInOut, value: backgroundColor)
+                    .cornerRadius(8)
+                    .clipped()
+                    .shadow(color: .gray.opacity(0.3), radius: 20)
+            }
         }
         .padding(40)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -44,8 +53,6 @@ struct TimerView: View {
     @Environment(\.managedObjectContext) var context
     @State var backgroundColor = Color.black
     @State var stop = true
-    
-    let colors: [Color] = [.red, .green, .blue, .orange, .purple, .yellow, .pink]
     
     var colorChangeAction: (Color) -> Void
     
@@ -70,7 +77,7 @@ struct TimerView: View {
             }
             .frame(minWidth: 650, maxWidth: .infinity, minHeight: 200, maxHeight: 200)
             Divider()
-            WeekCountView()
+            StaticsWeekView()
             Spacer()
         }
         .offset(y: 20)
@@ -115,34 +122,6 @@ struct PomodomoButtonView: View {
         .font(.system(size: 20, weight: .medium))
     }
 }
-
-
-struct WeekCountView: View {
-    let colors: [Color] = [.accentColor, Color("StaticsGray"), .accentColor, .accentColor, Color("StaticsGray"), .accentColor, .accentColor]
-    let weeks: [String] = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
-    @Environment(\.managedObjectContext) var context
-    @FetchRequest(sortDescriptors: []) var history: FetchedResults<PomoCount>
-    var body: some View {
-        VStack(spacing: 5) {
-            HStack(spacing: 20) {
-                ForEach(colors.indices, id: \.self) { index in
-                    ZStack {
-                        Circle()
-                            .fill(colors[index].opacity(0.8))
-                            .frame(width: 40, height: 40)
-                        Text(weeks[index])
-                            .foregroundColor(Color("BackgroundWhite"))
-                    }
-                }
-            }
-            .padding()
-            Text("开启新的连续专注记录")
-            Text("你的记录是5天。")
-                .foregroundColor(Color("TextGray"))
-        }
-    }
-}
-
 
 struct PomodomoTextView: View {
     @State var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()

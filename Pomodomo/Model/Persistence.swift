@@ -36,11 +36,7 @@ func clearCoreData(context: NSManagedObjectContext) {
 }
 
 func addRecord(context: NSManagedObjectContext, date: Date, count: Int, time: Int) {
-    let calendar = Calendar.current
-    let year = calendar.component(.year, from: date)
-    let month = calendar.component(.month, from: date)
-    let day = calendar.component(.day, from: date)
-    let date = createDateOnly(year: year, month: month, day: day)
+    let date = createDateOnly(date: date)
     if let existingRecord = fetchRecord(context: context, for: date) {
         existingRecord.count += Int16(count)
         existingRecord.time += Int16(time)
@@ -72,11 +68,14 @@ func formatDate(date: Date) -> String {
         return formatter.string(from: date)
 }
 
-func createDateOnly(year: Int, month: Int, day: Int) -> Date {
+func createDateOnly(date: Date) -> Date {
+    let calendar = Calendar.current
+    let year = calendar.component(.year, from: date)
+    let month = calendar.component(.month, from: date)
+    let day = calendar.component(.day, from: date)
     var components = DateComponents()
     components.year = year
     components.month = month
     components.day = day
-    let calendar = Calendar.current
     return calendar.date(from: components) ?? Date()
 }
