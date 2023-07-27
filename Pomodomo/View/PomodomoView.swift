@@ -28,19 +28,19 @@ struct PomodomoView: View {
                 //.animation(.easeInOut, value: backgroundColor)
                 .cornerRadius(8)
                 .clipped()
-                .shadow(color: .gray.opacity(0.3), radius: 20)
+                .shadow(color: .gray.opacity(0.3), radius: 10)
                 StaticsView()
                     .padding(30)
                     .background(backgroundColor)
                     //.animation(.easeInOut, value: backgroundColor)
                     .cornerRadius(8)
                     .clipped()
-                    .shadow(color: .gray.opacity(0.3), radius: 20)
+                    //.shadow(color: .gray.opacity(0.3), radius: 20)
             }
         }
         .padding(40)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.white)
+        .background(Color("BackgroundWhite"))
     }
     
     func changeBackgroundColor(_ newColor: Color) {

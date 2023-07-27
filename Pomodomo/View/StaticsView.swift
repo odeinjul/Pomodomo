@@ -10,32 +10,21 @@ import SwiftUI
 struct StaticsView: View {
     @Environment(\.managedObjectContext) var context
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \PomoCount.date, ascending: true)]) var history: FetchedResults<PomoCount>
+    var calendar = Calendar(identifier: .gregorian)
 
     var body: some View {
         VStack {
-            // Test part
             StaticsYearView()
             Button("Add") {
                 addRecord(context: context, date: Date.now, count: 1, time: 25)
             }
             Button("Clear Data") {
                 clearCoreData(context: context)
-                for i in 0..<100 {
-                    addRecord(context: context, date: Calendar.current.date(byAdding: .day, value: -i, to: Date())!, count: i % 5, time: 25 * (i % 5))
-                    //print(Date.now.addingTimeInterval(TimeInterval(-86400 * i)))
-                    //print(i % 5)
-                    //print(25 * (i % 5))
+                for i in 0..<1000 {
+                    addRecord(context: context, date: calendar.date(byAdding: .day, value: -i, to: Date())!, count: i % 5, time: 25 * (i % 5))
                 }
                 print("HI")
             }
-            /*
-            ForEach(history, id: \.self) { day in
-                HStack {
-                    Text("\(day.count)")
-                    Text(day.date != nil ? formatDate(date: day.date!) : "")
-                }
-            }
-             */
         }
     }
 }
@@ -61,35 +50,53 @@ struct StaticsWeekView: View {
 }
 
 func fetchRecordsForPastWeek(day: Date, context: NSManagedObjectContext) -> [Double] {
-    let calendar = Calendar.current
-    let today = Date()
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone.current
 
-    var components = calendar.dateComponents([.year, .weekOfYear], from: today)
-    components.weekday = 1
-    guard let startDate = calendar.date(from: components) else {
+
+    let components = calendar.dateComponents([.year, .weekOfYear, .weekday], from: day)
+    print("---")
+    print(day)
+    print((components.weekday! - 1))
+    guard let startDate = calendar.date(byAdding: .day, value: -(components.weekday! - 1), to: day) else {
         print("Error calculating start date.")
         return []
     }
-    components.weekday = 7
-    guard let endDate = calendar.date(from: components) else {
+    guard let endDate = calendar.date(byAdding: .day, value: 7, to: startDate) else {
         print("Error calculating end date.")
         return []
     }
+    print(startDate)
+    print(endDate)
     
 
     let fetchRequest: NSFetchRequest<PomoCount> = PomoCount.fetchRequest()
     fetchRequest.predicate = NSPredicate(format: "date >= %@ AND date <= %@", startDate as NSDate, endDate as NSDate)
     do {
         let records = try context.fetch(fetchRequest)
-        let weekRecord = (0..<7).map {
-            let date = calendar.date(byAdding: .day, value: $0, to: startDate)!
-            let dayRecord = records.filter { calendar.isDate($0.date!, inSameDayAs: date) }
-            //print(Double((dayRecord.first != nil) ? dayRecord.first!.time : 0))
-            return Double((dayRecord.first != nil) ? dayRecord.first!.time : 0)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        dateFormatter.timeZone = TimeZone.current // Replace with the desired time zone
+        let weekRecord = (1...7).map { index in
+            print("---")
+            let date = calendar.date(byAdding: .day, value: index, to: startDate)!
+            let dayRecord = records.filter {
+                calendar.timeZone = TimeZone.current;
+                print("date0: \(dateFormatter.string(from: $0.date!))");
+                print(calendar.isDate($0.date!, equalTo: date, toGranularity: .day));
+                return calendar.isDate($0.date!, equalTo: date, toGranularity: .day) }
+            print("date: \(dateFormatter.string(from: date))")
+            //print((dayRecord.first != nil) ? dayRecord.first!.date : 0)
+            print(Double((dayRecord.first != nil) ? dayRecord.first!.time : 0))
+            if (date > Date()) {
+                return -1.0
+            }
+            else {
+                return Double((dayRecord.first != nil) ? dayRecord.first!.time : 0)
+            }
         }
         return weekRecord
     } catch {
-        // Handle the error
         print("Error fetching records: \(error)")
         return []
     }
@@ -102,13 +109,15 @@ struct StaticsYearView: View {
     
     var body: some View {
         HStack(spacing: 4) {
-            ForEach(0..<subDays.count, id: \.self) { index in
-                let subDay = subDays[index]
-                let startDate = Calendar.current.date(byAdding: .day, value: -subDay, to: Date())
-                let records = fetchRecordsForPastWeek(day: startDate!, context: context)
-                StaticsColumnView(intensities: records)
-                
-            }
+                Spacer()
+                ForEach(0..<subDays.count, id: \.self) { index in
+                    let subDay = subDays[index]
+                    let startDate = Calendar.current.date(byAdding: .day, value: -subDay, to: Date())
+                    let records = fetchRecordsForPastWeek(day: startDate!, context: context)
+                    StaticsColumnView(intensities: records)
+                    //Text("\(startDate!)")
+                }
+                Spacer()
         }
     }
 }
@@ -117,8 +126,8 @@ struct StaticsColumnView: View {
     var intensities: [Double]
     var body: some View {
         VStack(spacing: 4) {
-            ForEach(intensities, id: \.self) { intensity in
-                StaticsBlockView(intensity: intensity)
+            ForEach(0..<7, id: \.self) { index in
+                StaticsBlockView(intensity: intensities[index])
             }
         }
     }
@@ -157,7 +166,7 @@ struct StaticsCircleView: View {
 struct StaticsBlockView: View {
     var intensity: Double
     var body: some View {
-        let color = intensity < 0 ? Color.clear : ((intensity == 0) ? Color("StaticsGray") : Color.accentColor.opacity(intensity))
+        let color = intensity < 0 ? Color.clear : ((intensity == 0) ? Color("StaticsGray") : Color.accentColor.opacity(intensity / 100))
         //let borderColor = intensity < 0 ? Color.clear : ((intensity == 0) ? Color("StaticsGray") : Color.accentColor)
         RoundedRectangle(cornerRadius: 3)
             .fill(color)

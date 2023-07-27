@@ -30,7 +30,6 @@ func clearCoreData(context: NSManagedObjectContext) {
         try context.execute(batchDeleteRequest)
         try context.save()
     } catch {
-        // Handle the error
         print("Error clearing Core Data: \(error)")
     }
 }
