@@ -14,7 +14,7 @@ enum PomodomoType: String {
     func simpleDescription() -> String {
         switch self {
         case .Pomo:
-            return "番茄钟"
+            return "Pomo"
         case .SmallRelax:
             return "短休息"
         case .LongRelax:
