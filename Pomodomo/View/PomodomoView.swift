@@ -15,30 +15,41 @@ let musicData = NSDataAsset(name: "Ring")!.data
 var audioPlayer: AVAudioPlayer?
 
 struct PomodomoView: View {
-    @State private var backgroundColor = Color("BackgroundWhite")
+    @State private var backgroundColor = Color("CardBackground")
     
     var body: some View {
-        ZStack {
-            VStack {
-                TimerView(colorChangeAction: { newColor in
-                    self.changeBackgroundColor(newColor)
-                })
-                .padding(30)
-                .background(backgroundColor)
-                //.animation(.easeInOut, value: backgroundColor)
-                .cornerRadius(8)
-                .clipped()
-                .shadow(color: .gray.opacity(0.3), radius: 10)
+        ScrollView {
+            VStack (spacing: 40){
+                VStack (alignment: .leading, spacing: 5){
+                    Text("Pomo")
+                        .font(.title)
+                        .fontWeight(.semibold)
+                    Text("再早一点，再早一点进入摸鱼时间！")
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(Color("TextGray"))
+                    Spacer()
+                    TimerView(colorChangeAction: { newColor in
+                        self.changeBackgroundColor(newColor)
+                    })
+                    .padding(30)
+                    .background(backgroundColor)
+                    //.animation(.easeInOut, value: backgroundColor)
+                    .cornerRadius(12)
+                    .clipped()
+                    .shadow(color: Color("ShadowGray").opacity(0.5), radius: 15)
+                }
+                .padding(.horizontal, 50)
                 StaticsView()
                     .padding(30)
                     .background(backgroundColor)
                     //.animation(.easeInOut, value: backgroundColor)
-                    .cornerRadius(8)
+                    .cornerRadius(12)
                     .clipped()
-                    //.shadow(color: .gray.opacity(0.3), radius: 20)
+                    .padding(.horizontal, 50)
+                    .shadow(color: Color("ShadowGray").opacity(0.5), radius: 15)
             }
+            .padding(.vertical, 30)
         }
-        .padding(40)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("BackgroundWhite"))
     }
@@ -133,16 +144,17 @@ struct PomodomoTextView: View {
     
     var body: some View {
         VStack (spacing: 0) {
-            HStack {
+            HStack (spacing: 0) {
                 Text(pomodomoCurrent.type.simpleDescription())
                     .padding(.vertical, 2)
                     .padding(.horizontal, 6)
-                    .foregroundColor(.white)
-                    .font(.system(size: 15, weight: .medium))
-                    .background(RoundedRectangle(cornerRadius: 5)
-                        .fill(timerColor))
+                    .foregroundColor(timerColor)
+                    .font(.system(size: 20, weight: .black))
+                    //.background(RoundedRectangle(cornerRadius: 5)
+                    //  .fill(timerColor))
+                //Divider()
                 Text("剩余时间")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.system(size: 17, weight: .bold))
             }
             Text("\(secondsToHoursMinutesSeconds(Int(pomodomoCurrent.timeTotal - pomodomoCurrent.timePassed)))")
                 .onReceive(timer) { _ in
@@ -163,7 +175,7 @@ struct PomodomoTextView: View {
                 }
                 .font(.system(size: 55))
             Text("（目标：25分钟）")
-                .font(.system(size: 13, weight: .regular))
+                .font(.system(size: 11, weight: .regular))
         }
     }
 }
@@ -179,14 +191,16 @@ func NextPomo (pomodomoCurrent: Pomodomo, stop: inout Bool, colorChangeAction:  
         pomodomoCurrent.setType(.SmallRelax)
     }
     timerColor = pomodomoCurrent.color
-    withAnimation {
+    /*
+     withAnimation {
         colorChangeAction(timerColor)
     }
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
         withAnimation {
-            colorChangeAction(Color("BackgroundWhite"))
+            colorChangeAction(Color("CardBackground"))
         }
     }
+     */
 
     stop = true
 }

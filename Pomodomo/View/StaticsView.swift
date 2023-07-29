@@ -145,6 +145,7 @@ struct StaticsCircleView: View {
                     .frame(width: 40, height: 40)
                 Text(weekDay)
                     .foregroundColor(Color("BackgroundWhite"))
+                    .fontWeight(.semibold)
             }
         }
         else {
@@ -157,6 +158,7 @@ struct StaticsCircleView: View {
                 .frame(width: 35, height: 35)
                 Text(weekDay)
                     .foregroundColor(Color("TextGray"))
+                    .fontWeight(.semibold)
             }
         }
     }
