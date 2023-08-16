@@ -37,7 +37,7 @@ class Pomodomo: ObservableObject{
             self.timeTotal = 25 * 60.0
             self.color = Color("PomoRed")
         case .SmallRelax:
-            self.timeTotal = 5 * 60.0
+            self.timeTotal = 4//5 * 60.0
             self.color = Color("PomoGreen")
         case .LongRelax:
             self.timeTotal = 15 * 60.0
@@ -55,7 +55,7 @@ class Pomodomo: ObservableObject{
             self.timeTotal = 25 * 60.0
             self.color = Color("PomoRed")
         case .SmallRelax:
-            self.timeTotal = 5 * 60.0
+            self.timeTotal = 4//5 * 60.0
             self.color = Color("PomoGreen")
         case .LongRelax:
             self.timeTotal = 15 * 60.0

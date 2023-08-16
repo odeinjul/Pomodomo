@@ -158,9 +158,9 @@ struct PomodomoTextView: View {
             }
             Text("\(secondsToHoursMinutesSeconds(Int(pomodomoCurrent.timeTotal - pomodomoCurrent.timePassed)))")
                 .onReceive(timer) { _ in
-                    if (pomodomoCurrent.timePassed <= pomodomoCurrent.timeTotal && !stop)  {
+                    //print(pomodomoCurrent.timePassed)
+                    if (pomodomoCurrent.timePassed < pomodomoCurrent.timeTotal && !stop)  {
                         pomodomoCurrent.timePassed += 1.0
-                        print("\(pomodomoCurrent.timePassed)")
                     }
                     else if(pomodomoCurrent.timePassed == pomodomoCurrent.timeTotal) {
                         do{
@@ -169,7 +169,9 @@ struct PomodomoTextView: View {
                         }catch{
                             print("Failed to play sound")
                         }
-                        addRecord(context: context, date: Date.now, count: 1, time: 25)
+                        if(pomodomoCurrent.type == PomodomoType.Pomo) {
+                            addRecord(context: context, date: Date.now, count: 1, time: 25)
+                        }
                         NextPomo(pomodomoCurrent: pomodomoCurrent, stop: &stop, colorChangeAction: colorChangeAction)
                     }
                 }
@@ -181,6 +183,7 @@ struct PomodomoTextView: View {
 }
 
 func NextPomo (pomodomoCurrent: Pomodomo, stop: inout Bool, colorChangeAction:  @escaping (Color) -> Void)-> Void {
+    stop = true
     pomodomoCount += 1
     pomodomoCount %= 8
     if (pomodomoCount == 7) {
@@ -191,8 +194,9 @@ func NextPomo (pomodomoCurrent: Pomodomo, stop: inout Bool, colorChangeAction:  
         pomodomoCurrent.setType(.SmallRelax)
     }
     timerColor = pomodomoCurrent.color
+    pomodomoCurrent.timePassed = 0
     /*
-     withAnimation {
+    withAnimation {
         colorChangeAction(timerColor)
     }
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -201,8 +205,6 @@ func NextPomo (pomodomoCurrent: Pomodomo, stop: inout Bool, colorChangeAction:  
         }
     }
      */
-
-    stop = true
 }
 
 struct PomodomoView_Previews: PreviewProvider {

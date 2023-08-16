@@ -13,8 +13,10 @@ struct StaticsView: View {
     var calendar = Calendar(identifier: .gregorian)
 
     var body: some View {
+        /*
         VStack {
             StaticsYearView()
+            
             Button("Add") {
                 addRecord(context: context, date: Date.now, count: 1, time: 25)
             }
@@ -25,7 +27,9 @@ struct StaticsView: View {
                 }
                 print("HI")
             }
-        }
+             
+        }*/
+        StaticsYearView()
     }
 }
 
@@ -55,19 +59,19 @@ func fetchRecordsForPastWeek(day: Date, context: NSManagedObjectContext) -> [Dou
 
 
     let components = calendar.dateComponents([.year, .weekOfYear, .weekday], from: day)
-    print("---")
-    print(day)
-    print((components.weekday! - 1))
+    //print("---")
+    //print(day)
+    //print((components.weekday! - 1))
     guard let startDate = calendar.date(byAdding: .day, value: -(components.weekday! - 1), to: day) else {
-        print("Error calculating start date.")
+        //print("Error calculating start date.")
         return []
     }
     guard let endDate = calendar.date(byAdding: .day, value: 7, to: startDate) else {
-        print("Error calculating end date.")
+        //xprint("Error calculating end date.")
         return []
     }
-    print(startDate)
-    print(endDate)
+    //print(startDate)
+    //print(endDate)
     
 
     let fetchRequest: NSFetchRequest<PomoCount> = PomoCount.fetchRequest()
@@ -78,16 +82,16 @@ func fetchRecordsForPastWeek(day: Date, context: NSManagedObjectContext) -> [Dou
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         dateFormatter.timeZone = TimeZone.current // Replace with the desired time zone
         let weekRecord = (1...7).map { index in
-            print("---")
+            //print("---")
             let date = calendar.date(byAdding: .day, value: index, to: startDate)!
             let dayRecord = records.filter {
                 calendar.timeZone = TimeZone.current;
-                print("date0: \(dateFormatter.string(from: $0.date!))");
-                print(calendar.isDate($0.date!, equalTo: date, toGranularity: .day));
+                //print("date0: \(dateFormatter.string(from: $0.date!))");
+                //print(calendar.isDate($0.date!, equalTo: date, toGranularity: .day));
                 return calendar.isDate($0.date!, equalTo: date, toGranularity: .day) }
-            print("date: \(dateFormatter.string(from: date))")
+            //print("date: \(dateFormatter.string(from: date))")
             //print((dayRecord.first != nil) ? dayRecord.first!.date : 0)
-            print(Double((dayRecord.first != nil) ? dayRecord.first!.time : 0))
+            //print(Double((dayRecord.first != nil) ? dayRecord.first!.time : 0))
             if (date > Date()) {
                 return -1.0
             }
@@ -115,7 +119,6 @@ struct StaticsYearView: View {
                     let startDate = Calendar.current.date(byAdding: .day, value: -subDay, to: Date())
                     let records = fetchRecordsForPastWeek(day: startDate!, context: context)
                     StaticsColumnView(intensities: records)
-                    //Text("\(startDate!)")
                 }
                 Spacer()
         }
